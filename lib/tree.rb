@@ -2,6 +2,7 @@
 
 require_relative 'node'
 
+# This object
 class Tree
   attr_reader :root
 
