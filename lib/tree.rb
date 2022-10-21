@@ -7,10 +7,20 @@ class Tree
   attr_reader :root
 
   def initialize(array)
-    @root = quick_sort(array, 0, array.length - 1)
+    @root = build_tree(quick_sort(array, 0, array.length - 1), 0, array.length - 1)
   end
 
   private
+
+  def build_tree(array, s, e)
+    return nil if s > e
+
+    mid = (e + s) / 2
+    node = Node.new(array[mid])
+    node.left = build_tree(array, s, mid - 1)
+    node.right = build_tree(array, mid + 1, e)
+    node
+  end
 
   def quick_sort(array, s, e)
     if s < e
@@ -18,6 +28,7 @@ class Tree
       quick_sort(array, s, p - 1)
       quick_sort(array, p + 1, e)
     end
+    array.uniq!
     array
   end
 
