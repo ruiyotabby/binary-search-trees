@@ -24,8 +24,16 @@ class Tree
     _delete(node)
   end
 
+  def height(node = @root)
+    return 0 if node.nil?
+
+    left_height = height(node.left)
+    right_height = height(node.right)
+    return left_height > right_height ? left_height + 1 : right_height + 1
+  end
+
   def find(value, node = @root)
-    return 'Failed, value not found' if node.nil?
+    return "Failed, value #{value} not found in the tree" if node.nil?
     return node if value == node.data
     return find(value, node.left) if value < node.data
     return find(value, node.right) if value > node.data
@@ -149,19 +157,3 @@ class Tree
     array
   end
 end
-
-array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
-t = Tree.new array
-p array
-# p t.root
-# print t.pretty_print
-m = Node.new 13
-t.insert(m)
-n = Node.new 2
-t.insert n
-p t.root
-t.delete(m)
-puts t.pretty_print
-p t.find 2
-t.level_order { |node| puts "Here is node #{node}"}
-p t.level_order
