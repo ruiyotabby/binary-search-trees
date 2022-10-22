@@ -2,11 +2,12 @@
 
 # Object which holds a single element of data and a pointer to the left and right node in the tree.
 class Node
-  attr_accessor :data, :right, :left
+  attr_accessor :data, :right, :left, :parent
 
-  def initialize(data = nil, right = nil, left = nil)
+  def initialize(data = nil)
     @data = data
-    @right = right
-    @left = left
+    @right = nil
+    @left = nil
+    @parent = nil
   end
 end
