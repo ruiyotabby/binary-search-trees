@@ -17,6 +17,49 @@ class Tree
   end
 
   def insert(node)
+    _insert(node)
+  end
+
+  def delete(node)
+    _delete(node)
+  end
+
+  private
+
+  def _delete(node)
+    if node.left.nil?
+      transplant(node, node.right)
+    elsif node.right.nil?
+      transplant(node, node.left)
+    else
+      successor = minimum(node.right)
+      unless successor.parent == node
+        transplant(successor, successor.right)
+        successor.right = node.right
+        successor.right.parent = successor
+      end
+      transplant(node, successor)
+      successor.left = node.left
+      successor.length.parent = successor
+    end
+  end
+
+  def minimum(node)
+    node = node.left until node.left.nil?
+  end
+
+  def transplant(node, replace_node)
+    if node.parent.nil?
+      @root = replace_node
+    elsif node == node.parent.left
+      node.parent.left = replace_node
+    elsif node == node.parent.right
+      node.parent.right = replace_node
+    end
+    replace_node.parent = node.parent unless replace_node.nil?
+  end
+
+  def _insert(node)
     parent_pointer = nil
     x = @root
     until x.nil?
@@ -36,8 +79,6 @@ class Tree
       parent_pointer.right = node
     end
   end
-
-  private
 
   def build_tree(array, s, e)
     return nil if s > e
@@ -93,5 +134,9 @@ p array
 # print t.pretty_print
 m = Node.new 13
 t.insert(m)
+n = Node.new 2
+t.insert n
 p t.root
-print t.pretty_print
+puts t.pretty_print
+t.delete(m)
+puts t.pretty_print
