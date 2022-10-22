@@ -24,6 +24,13 @@ class Tree
     _delete(node)
   end
 
+  def find(value, node = @root)
+    return nil if @root.nil?
+    return node if value == node.data
+    return find(value, node.left) if value < node.data
+    return find(value, node.right) if value > node.data
+  end
+
   private
 
   def _delete(node)
@@ -140,3 +147,5 @@ p t.root
 puts t.pretty_print
 t.delete(m)
 puts t.pretty_print
+p t.find 7
+
