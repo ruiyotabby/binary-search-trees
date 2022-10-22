@@ -25,10 +25,26 @@ class Tree
   end
 
   def find(value, node = @root)
-    return nil if @root.nil?
+    return 'Failed, value not found' if node.nil?
     return node if value == node.data
     return find(value, node.left) if value < node.data
     return find(value, node.right) if value > node.data
+  end
+
+  def level_order
+    values = []
+    queue = []
+    queue.push(@root)
+    until queue.empty?
+      temp_node = queue.shift
+
+      yield(temp_node) if block_given?
+      values << temp_node.data unless block_given?
+
+      queue.push(temp_node.left) unless temp_node.left.nil?
+      queue.push(temp_node.right) unless temp_node.right.nil?
+    end
+    return values unless block_given?
   end
 
   private
@@ -144,8 +160,8 @@ t.insert(m)
 n = Node.new 2
 t.insert n
 p t.root
-puts t.pretty_print
 t.delete(m)
 puts t.pretty_print
-p t.find 7
-
+p t.find 2
+t.level_order { |node| puts "Here is node #{node}"}
+p t.level_order
