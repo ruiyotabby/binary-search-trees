@@ -7,7 +7,7 @@ class Tree
   attr_reader :root
 
   def initialize(array)
-    array = array.uniq.sort
+    array = array.sort
     @root = build_tree(array, 0, array.length - 1)
   end
 
@@ -27,11 +27,12 @@ class Tree
 
   def rebalance
     nodes = inorder
-    nodes = nodes.uniq.sort
+    nodes = nodes.sort
     @root = build_tree(nodes, 0, nodes.length - 1)
   end
 
   def balanced?
+    p (height(@root.left) - height(@root.right)).abs
     return true if (height(@root.left) - height(@root.right)).abs <= 1
 
     false
