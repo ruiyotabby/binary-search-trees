@@ -7,7 +7,8 @@ class Tree
   attr_reader :root
 
   def initialize(array)
-    @root = build_tree(quick_sort(array, 0, array.length - 1), 0, array.length - 1)
+    array = array.uniq.sort
+    @root = build_tree(array, 0, array.length - 1)
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true)
@@ -22,6 +23,12 @@ class Tree
 
   def delete(node)
     _delete(node)
+  end
+
+  def rebalance
+    nodes = inorder
+    nodes = nodes.uniq.sort
+    @root = build_tree(nodes, 0, nodes.length - 1)
   end
 
   def balanced?
@@ -60,14 +67,14 @@ class Tree
     return values unless block_given?
   end
 
-  def depth(node)
+  def depth(node = @root)
     return 0 if node == @root
 
     depth = depth(node.parent)
     return depth + 1
   end
 
-  def height(node)
+  def height(node = @root)
     return 0 if node.nil?
 
     left_height = height(node.left)
@@ -100,7 +107,8 @@ class Tree
 
   private
 
-  def _delete(node)
+  def _delete(value)
+    node = find(value)
     if node.left.nil?
       transplant(node, node.right)
     elsif node.right.nil?
@@ -133,7 +141,9 @@ class Tree
     replace_node.parent = node.parent unless replace_node.nil?
   end
 
-  def _insert(node)
+  def _insert(value)
+    node = Node.new(value) unless value.is_a? Node
+    node = value if value.is_a? Node
     parent_pointer = nil
     x = @root
     until x.nil?
@@ -155,7 +165,7 @@ class Tree
   end
 
   def build_tree(array, s, e)
-    return nil if s > e
+    return if s > e
 
     mid = (e + s) / 2
 
@@ -168,35 +178,5 @@ class Tree
     node.right.parent = node unless node.right.nil?
 
     node
-  end
-
-  def quick_sort(array, s, e)
-    if s < e
-      p = partition(array, s, e)
-      quick_sort(array, s, p - 1)
-      quick_sort(array, p + 1, e)
-    end
-    array.uniq!
-    array
-  end
-
-  def partition(array, s, e)
-    x = array[e]
-    i = s - 1
-    (s...e).each do |j|
-      next unless array[j] <= x
-
-      i += 1
-      swap(array, i, j)
-    end
-    swap(array, (i + 1), e)
-    i + 1
-  end
-
-  def swap(array, i, j)
-    temp = array[i]
-    array[i] = array[j]
-    array[j] = temp
-    array
   end
 end
