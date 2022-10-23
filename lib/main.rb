@@ -19,6 +19,4 @@ t.level_order { |node| puts "Here is node #{node}"}
 p t.level_order
 p t.height o
 p t.depth o
-p t.inorder
-p t.preorder
-p t.postorder
+p t.balanced?

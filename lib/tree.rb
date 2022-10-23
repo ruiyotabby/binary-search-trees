@@ -24,6 +24,12 @@ class Tree
     _delete(node)
   end
 
+  def balanced?
+    return true if (height(@root.left) - height(@root.right)).abs <= 1
+
+    false
+  end
+
   def postorder(node = @root, values = [])
     unless node.nil?
       postorder(node.left, values)
