@@ -24,14 +24,44 @@ class Tree
     _delete(node)
   end
 
+  def postorder(node = @root, values = [])
+    unless node.nil?
+      postorder(node.left, values)
+      postorder(node.right, values)
+      yield node if block_given?
+      values << node.data unless block_given?
+    end
+    return values unless block_given?
+  end
+
+  def inorder(node = @root, values = [])
+    unless node.nil?
+      inorder(node.left, values)
+      yield node if block_given?
+      values << node.data unless block_given?
+      inorder(node.right, values)
+    end
+    return values unless block_given?
+  end
+
+  def preorder(node = @root, values = [])
+    unless node.nil?
+      yield node if block_given?
+      values << node.data unless block_given?
+      preorder(node.left, values)
+      preorder(node.right, values)
+    end
+    return values unless block_given?
+  end
+
   def depth(node)
     return 0 if node == @root
 
     depth = depth(node.parent)
-    depth + 1
+    return depth + 1
   end
 
-  def height(node = @root)
+  def height(node)
     return 0 if node.nil?
 
     left_height = height(node.left)
@@ -78,7 +108,7 @@ class Tree
       end
       transplant(node, successor)
       successor.left = node.left
-      successor.length.parent = successor
+      successor.left.parent = successor
     end
   end
 
