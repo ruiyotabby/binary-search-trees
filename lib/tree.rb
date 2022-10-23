@@ -24,6 +24,13 @@ class Tree
     _delete(node)
   end
 
+  def depth(node)
+    return 0 if node == @root
+
+    depth = depth(node.parent)
+    depth + 1
+  end
+
   def height(node = @root)
     return 0 if node.nil?
 
